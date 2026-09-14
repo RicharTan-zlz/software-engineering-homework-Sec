@@ -4,3 +4,5 @@ __pycache__/
 htmlcov/
 .idea/
 .vscode/
+profile.out
+profile_big.out

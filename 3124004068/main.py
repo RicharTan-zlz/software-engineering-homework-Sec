@@ -18,8 +18,7 @@ jieba.initialize()
 
 
 class FileError(Exception):
-    """自定义文件异常"""
-    pass
+    """自定义文件异常，用于封装文件读写相关错误。"""
 
 
 def read_file(path: str) -> str:
@@ -39,7 +38,7 @@ def read_file(path: str) -> str:
         with open(path, 'r', encoding='gbk', errors='ignore') as f:
             return f.read()
     except IOError as e:
-        raise FileError(f"读取文件失败: {path}, 原因: {e}")
+        raise FileError(f"读取文件失败: {path}, 原因: {e}") from e
 
 
 def write_result(path: str, rate: float) -> None:
@@ -48,7 +47,7 @@ def write_result(path: str, rate: float) -> None:
         with open(path, 'w', encoding='utf-8') as f:
             f.write(f"{rate:.2f}")
     except IOError as e:
-        raise FileError(f"写入文件失败: {path}, 原因: {e}")
+        raise FileError(f"写入文件失败: {path}, 原因: {e}") from e
 
 
 def preprocess(text: str) -> list:
@@ -160,6 +159,7 @@ def calculate_similarity(orig_text: str, copy_text: str) -> float:
 
 
 def main():
+    """程序入口：解析命令行参数，计算相似度并写出结果。"""
     if len(sys.argv) != 4:
         print("用法: python main.py [原文文件] [抄袭版论文] [答案文件]")
         sys.exit(1)
@@ -174,7 +174,7 @@ def main():
     except FileError as e:
         print(f"[错误] {e}")
         sys.exit(2)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(f"[未预期错误] {e}")
         sys.exit(3)
 
